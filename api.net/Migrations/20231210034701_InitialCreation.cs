@@ -60,7 +60,7 @@ namespace api.net.Migrations
                     doctor_id = table.Column<int>(type: "INTEGER", nullable: false),
                     patient_id = table.Column<int>(type: "INTEGER", nullable: false),
                     scheduling_date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    status_id = table.Column<string>(type: "TEXT", nullable: false)
+                    status_id = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,6 +75,11 @@ namespace api.net.Migrations
                         column: x => x.patient_id,
                         principalTable: "tb_patients",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_tb_scheduling_tb_status_status_id",
+                        column: x => x.status_id,
+                        principalTable: "tb_status",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -87,6 +92,11 @@ namespace api.net.Migrations
                 columns: new[] { "Id", "status_name" },
                 values: new object[] { 2, "Cancelado" });
 
+            migrationBuilder.InsertData(
+                table: "tb_status",
+                columns: new[] { "Id", "status_name" },
+                values: new object[] { 3, "Aguardando confirmação" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_tb_scheduling_doctor_id",
                 table: "tb_scheduling",
@@ -96,6 +106,11 @@ namespace api.net.Migrations
                 name: "IX_tb_scheduling_patient_id",
                 table: "tb_scheduling",
                 column: "patient_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tb_scheduling_status_id",
+                table: "tb_scheduling",
+                column: "status_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -104,13 +119,13 @@ namespace api.net.Migrations
                 name: "tb_scheduling");
 
             migrationBuilder.DropTable(
-                name: "tb_status");
-
-            migrationBuilder.DropTable(
                 name: "tb_doctors");
 
             migrationBuilder.DropTable(
                 name: "tb_patients");
+
+            migrationBuilder.DropTable(
+                name: "tb_status");
         }
     }
 }

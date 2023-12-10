@@ -19,6 +19,11 @@ namespace api.net.Data.Map
                 {
                     Id = 2,
                     StatusName = "Cancelado"
+                },
+                new Status()
+                {
+                    Id = 3,
+                    StatusName = "Aguardando confirmação"
                 }
             );
         }

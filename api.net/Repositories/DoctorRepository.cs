@@ -42,7 +42,7 @@ namespace api.net.Repositories
 
             if (doctorPorId == null)
             {
-                throw new Exception($"Usuario Para o ID: {id} não foi identificado no banco de dados.");
+                throw new Exception($"Registro não encontrado");
             }
 
             doctorPorId.Name = doctor.Name;
@@ -61,7 +61,7 @@ namespace api.net.Repositories
 
             if (doctorPorId == null)
             {
-                throw new Exception($"Usuario Para o ID: {id} não foi identificado no banco de dados.");
+                throw new Exception($"Registro não encontrado");
             }
             _dbContext.Doctors.Remove(doctorPorId);
             await _dbContext.SaveChangesAsync();

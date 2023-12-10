@@ -14,11 +14,19 @@ namespace api.net.Repositories
         }
         public async Task<Scheduling> SearchById(int id)
         {
-            return await _dbContext.Schedulings.FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Schedulings
+            .Include(i => i.Patient)
+            .Include(i => i.Doctor)
+            .Include(i => i.Status)
+            .FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<List<Scheduling>> SearchAllSchedulings()
         {
-            return await _dbContext.Schedulings.ToListAsync();
+            return await _dbContext.Schedulings
+            .Include(i => i.Patient)
+            .Include(i => i.Doctor)
+            .Include(i => i.Status)
+            .ToListAsync();
         }
         public async Task<Scheduling> Add(Scheduling scheduling)
         {
@@ -32,7 +40,7 @@ namespace api.net.Repositories
             Scheduling schedulingPorId = await SearchById(id);
             if (schedulingPorId == null)
             {
-                throw new Exception($"Usuario Para o ID: {id} nao foi identificado no banco de dados.");
+                throw new Exception($"Registro não encontrado");
             }
 
             schedulingPorId.Description = scheduling.Description;
@@ -52,10 +60,26 @@ namespace api.net.Repositories
 
             if (schedulingPorId == null)
             {
-                throw new Exception($"Usuario Para o ID: {id} não foi identificado no banco de dados.");
+                throw new Exception($"Registro não encontrado");
             }
 
-            _dbContext.Schedulings.Remove(schedulingPorId);
+            schedulingPorId.StatusId = 2;
+            _dbContext.Schedulings.Update(schedulingPorId);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> Confirm(int id)
+        {
+            Scheduling schedulingPorId = await SearchById(id);
+
+            if (schedulingPorId == null)
+            {
+                throw new Exception($"Registro não encontrado");
+            }
+
+            schedulingPorId.StatusId = 1;
+            _dbContext.Schedulings.Update(schedulingPorId);
             await _dbContext.SaveChangesAsync();
             return true;
         }

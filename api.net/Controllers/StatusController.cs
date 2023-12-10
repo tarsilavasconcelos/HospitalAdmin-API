@@ -17,9 +17,16 @@ namespace api.net.Controllers
         [HttpGet("search-all-status")]
         public async Task<ActionResult<List<Status>>> SearchAllStatus()
         {
-            List<Status> statuses = await _statusRepository.SearchAllStatusAsync();
+            try
+            {
+                List<Status> statuses = await _statusRepository.SearchAllStatusAsync();
 
-            return Ok(statuses);
+                return Ok(statuses);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
     }
 }

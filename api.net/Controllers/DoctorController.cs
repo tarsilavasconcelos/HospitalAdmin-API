@@ -17,37 +17,72 @@ namespace api.net.Controllers
         [HttpGet("search-all-doctors")]
         public async Task<ActionResult<List<Doctor>>> SearchAllDoctors()
         {
-            List<Doctor> users = await _doctorRepository.SearchAllDoctors();
-            return Ok(users);
+            try
+            {
+                List<Doctor> doctors = await _doctorRepository.SearchAllDoctors();
+                return Ok(doctors);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         [HttpGet("search/{id}")]
         public async Task<ActionResult<Doctor>> SearchById(int id)
         {
-            var doctor = await _doctorRepository.SearchById(id);
-            return Ok(doctor);
+            try
+            {
+                var doctor = await _doctorRepository.SearchById(id);
+                return Ok(doctor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<Doctor>> Register([FromBody] Doctor Doctor)
         {
-            Doctor users = await _doctorRepository.Add(Doctor);
-            return Ok(users);
+            try
+            {
+                Doctor doctor = await _doctorRepository.Add(Doctor);
+                return Ok(doctor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         [HttpPut("update/{id}")]
         public async Task<ActionResult<Doctor>> Update([FromBody] Doctor Doctor, int id)
         {
-            Doctor.Id = id;
-            Doctor users = await _doctorRepository.Update(Doctor, id);
-            return Ok(users);
+            try
+            {
+                Doctor.Id = id;
+                Doctor doctor = await _doctorRepository.Update(Doctor, id);
+                return Ok(doctor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult<Doctor>> Delete(int id)
         {
-            bool deleteded = await _doctorRepository.Delete(id);
-            return Ok(deleteded);
+            try
+            {
+                bool deleteded = await _doctorRepository.Delete(id);
+                return Ok(deleteded);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
     }
 }

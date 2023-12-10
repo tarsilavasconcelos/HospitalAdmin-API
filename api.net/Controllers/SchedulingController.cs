@@ -19,30 +19,87 @@ namespace api.net.Controllers
         [HttpGet("search-all-schedulings")]
         public async Task<ActionResult<List<Scheduling>>> SearchAllSchedulings()
         {
-            List<Scheduling> users = await _schedulingRepository.SearchAllSchedulings();
-            return Ok(users);
+            try
+            {
+                List<Scheduling> schedulings = await _schedulingRepository.SearchAllSchedulings();
+                return Ok(schedulings);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        [HttpGet("search/{id}")]
+        public async Task<ActionResult<Scheduling>> SearchSchedulingById(int id)
+        {
+            try
+            {
+                Scheduling scheduling = await _schedulingRepository.SearchById(id);
+                return Ok(scheduling);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<Scheduling>> Register([FromBody] Scheduling Scheduling)
         {
-            Scheduling users = await _schedulingRepository.Add(Scheduling);
-            return Ok(users);
+            try
+            {
+                Scheduling scheduling = await _schedulingRepository.Add(Scheduling);
+                return Ok(scheduling);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
+
         }
 
         [HttpPut("update/{id}")]
         public async Task<ActionResult<Scheduling>> Update([FromBody] Scheduling Scheduling, int id)
         {
-            Scheduling.Id = id;
-            Scheduling users = await _schedulingRepository.Update(Scheduling, id);
-            return Ok(users);
+            try
+            {
+                Scheduling.Id = id;
+                Scheduling scheduling = await _schedulingRepository.Update(Scheduling, id);
+                return Ok(scheduling);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult<Scheduling>> Delete(int id)
         {
-            bool deleteded = await _schedulingRepository.Delete(id);
-            return Ok(deleteded);
+            try
+            {
+                bool deleteded = await _schedulingRepository.Delete(id);
+                return Ok(deleteded);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        [HttpPut("confirm/{id}")]
+        public async Task<ActionResult<Scheduling>> Confirm(int id)
+        {
+            try
+            {
+                bool confirmed = await _schedulingRepository.Confirm(id);
+                return Ok(confirmed);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException?.Message ?? ex.Message);
+            }
         }
     }
 }

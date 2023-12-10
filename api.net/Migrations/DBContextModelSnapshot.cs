@@ -87,9 +87,8 @@ namespace api.net.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("scheduling_date");
 
-                    b.Property<string>("StatusId")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
+                    b.Property<int>("StatusId")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("status_id");
 
                     b.HasKey("Id");
@@ -97,6 +96,8 @@ namespace api.net.Migrations
                     b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("tb_scheduling");
                 });
@@ -125,6 +126,11 @@ namespace api.net.Migrations
                         {
                             Id = 2,
                             StatusName = "Cancelado"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            StatusName = "Aguardando confirmação"
                         });
                 });
 
@@ -142,9 +148,17 @@ namespace api.net.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("api.net.Models.Entity.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+
+                    b.Navigation("Status");
                 });
 #pragma warning restore 612, 618
         }

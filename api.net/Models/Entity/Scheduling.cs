@@ -18,7 +18,8 @@ namespace api.net.Models.Entity
         [Column("scheduling_date")]
         public DateTime? SchedulingDate { get; set; }
         [Column("status_id")]
-        public string? StatusId { get; set; }
+        public int StatusId { get; set; }
+        public Status? Status { get; set; }
 
     }
 }

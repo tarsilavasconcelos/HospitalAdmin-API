@@ -16,7 +16,7 @@ namespace api.net.Data.Map
             builder.HasOne(p => p.Doctor).WithMany().OnDelete(DeleteBehavior.NoAction);
             builder.Property(x => x.SchedulingDate).IsRequired();
             builder.Property(x => x.StatusId).IsRequired();
-
+            builder.HasOne(p => p.Status).WithMany().OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
